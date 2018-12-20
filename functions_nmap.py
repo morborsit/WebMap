@@ -38,7 +38,7 @@ def nmap_scaninfo(request):
 
 def nmap_newscan(request):
 	if request.method == "POST":
-		if(re.search('^[a-zA-Z0-9\_\-\.]+$', request.POST['filename'])):
+		if(re.search('^[a-zA-Z0-9\_\-\.]+$', request.POST['filename']) and not (re.search('[\||\;|\&}]', request.POST['params']) or re.search('[\||\;|\&}]', request.POST['target']))):
 			res = {'p':request.POST}
 			os.popen('nmap '+request.POST['params']+' --script='+settings.BASE_DIR+'/nmapreport/nmap/nse/ -oX /tmp/'+request.POST['filename']+'.active '+request.POST['target']+' > /dev/null 2>&1 && '+
 			'sleep 10 && mv /tmp/'+request.POST['filename']+'.active /opt/xml/'+request.POST['filename']+' &')
