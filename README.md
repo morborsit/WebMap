@@ -292,7 +292,7 @@ informations about your port scan. Please, be smart.
 
 ## Contributors
 This project is currently a beta, and I'm not super skilled on Django so, every type of contribution is appreciated. 
-I'll mention all contributors on the [CONTRIBUTORS](blob/v2.3/master/CONTRIBUTORS.md) file.
+I'll mention all contributors on the [CONTRIBUTORS](CONTRIBUTORS.md) file.
 
 ## Contacts
 In order to receive updates about this project, please follow me on twitter:<br>
