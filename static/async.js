@@ -193,7 +193,6 @@ function newscan() {
 
 function startscan() {
 	$('#modal1').modal('close');
-	swal("Started", "Your new Nmap scan is running...", "success");
 	csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
 	$.post('/api/v1/nmap/scan/new', {
 		'csrfmiddlewaretoken': csrftoken,
@@ -203,7 +202,11 @@ function startscan() {
 		'schedule': $('#schedule').prop('checked'),
 		'frequency': $('#frequency').val(),
 	}).done(function(d) {
-		console.log(d);
+		if(typeof(d['error']) != 'undefined') {
+			swal("Error", "Invalid syntax or disallowed characters", "error");
+		} else {
+			swal("Started", "Your new Nmap scan is running...", "success");
+		}
 	});
 }
 
