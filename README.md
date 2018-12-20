@@ -3,11 +3,6 @@
 A Web Dashbord for Nmap XML Report 
 </p>
 
-<img src="https://i.imgur.com/ELZfqd0.png" /><br>
-<img src="https://i.imgur.com/KsBv1S0.png" /><br>
-<img src="https://i.imgur.com/g27mcc3.png" /><br>
-<br>
-
 ## Table Of Contents
 - [Usage](#usage)
 - [Video](#video)
@@ -21,6 +16,11 @@ A Web Dashbord for Nmap XML Report
 - [Security Issues](#security-issues)
 - [Contributors](#contributors)
 - [Contacts](#contacts)
+
+<img src="https://i.imgur.com/ELZfqd0.png" /><br>
+<img src="https://i.imgur.com/KsBv1S0.png" /><br>
+<img src="https://i.imgur.com/g27mcc3.png" /><br>
+<br>
 
 ## Usage
 You should use this with docker, just by sending this command:
@@ -285,14 +285,14 @@ curl -v 'http://localhost:8000/api/v1/scan/hackthebox.xml/10.10.10.87?token=<tok
 - [vis.js](http://visjs.org/)
 
 ## Security Issues
-This app is not intended to be exposed on the internet. Please, **DO NOT expose** this app to the internet, use your localhost or, 
+This app is not intended to be exposed to the internet, but to be used as localhost web application. Please, **DO NOT expose** this app to the internet, use your localhost or, 
 in case you can't do it, take care to filter who and what can access to WebMap with a firewall rule or something like that. 
 Exposing this app to the whole internet could lead not only to a stored XSS but also to a leakage of sensitive/critical/private 
 informations about your port scan. Please, be smart.
 
 ## Contributors
 This project is currently a beta, and I'm not super skilled on Django so, every type of contribution is appreciated. 
-I'll mention all contributors in this section of the README file.
+I'll mention all contributors on the [CONTRIBUTORS](blob/v2.3/master/CONTRIBUTORS.md) file.
 
 ## Contacts
 In order to receive updates about this project, please follow me on twitter:<br>
