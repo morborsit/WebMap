@@ -161,7 +161,7 @@ function newscan() {
 		'<div class="input-field">'+
 		'	<div class="small">'+
 		'		<div style="padding:20px;">'+
-		'		<b>Filename:</b><br>Name of the Nmap XML file. This name must has the <code class="language-markup">.xml</code> extension.<br>Allowed chars: <code>[a-zA-Z0-9], _, - and .</code><br><br>'+
+		'		<b>Filename:</b><br>Name of the Nmap XML file. This name must have the <code class="language-markup">.xml</code> extension.<br>Allowed chars: <code>[a-zA-Z0-9], _, - and .</code><br><br>'+
 		'		<b>Target:</b><br>This could be the target IP address or hostname<br><br>'+
 		'		<b>Parameters:</b><br>Nmap parameters, more information at <a href="https://nmap.org/book/man-briefoptions.html">https://nmap.org/book/man-briefoptions.html</a>'+
 		'		<div>'+
