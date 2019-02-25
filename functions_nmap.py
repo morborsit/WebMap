@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
-import os, re, json, hashlib, time
+import os, subprocess, re, json, hashlib, time
 
 def nmap_scaninfo(request):
 	tmpfiles = os.listdir('/tmp/')
@@ -42,9 +42,20 @@ def nmap_newscan(request):
 			res = {'p':request.POST}
 			with open("/tmp/target.txt", "w") as target_file:
 				target_file.write(request.POST['target'])
-
-			os.popen('nmap '+request.POST['params']+' --script='+settings.BASE_DIR+'/nmapreport/nmap/nse/ -oX /tmp/'+request.POST['filename']+'.active -iL /tmp/target.txt > /dev/null 2>&1 && '+
-			'sleep 10 && mv /tmp/'+request.POST['filename']+'.active /opt/xml/'+request.POST['filename']+' &')
+		
+			subprocess.run([
+				'nmap',
+				request.POST['params'],
+				'--script={}'.format(settings.BASE_DIR),
+				'-oX',
+				'/tmp/{}.active'.format(request.POST['filename']),
+				'-iL',
+				'/tmp/target.txt'])
+			time.sleep(10)
+			os.rename(
+				'/tmp/{}.active'.format(request.POST['filename']),
+				'/opt/xml/{}'.format(request.POST['filename']),
+				)
 			
 			if request.POST['schedule'] == "true":
 				schedobj = {'params':request.POST, 'lastrun':time.time(), 'number':0}
@@ -54,6 +65,5 @@ def nmap_newscan(request):
 				file.write(json.dumps(schedobj, indent=4))
 
 			return HttpResponse(json.dumps(res, indent=4), content_type="application/json")
-		else:
-			res = {'error':'invalid syntax'}
-			return HttpResponse(json.dumps(res, indent=4), content_type="application/json")
+		res = {'error':'invalid syntax'}
+		return HttpResponse(json.dumps(res, indent=4), content_type="application/json")

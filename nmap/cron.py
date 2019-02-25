@@ -1,39 +1,74 @@
+import subprocess
+import os
+import re
+import json
+import time
 from django.conf import settings
-import os, re, json, time
 
-cdir = os.path.dirname(os.path.realpath(__file__))
 
-schedfiles = os.listdir(cdir+'/schedule/')
+CDIR = os.path.dirname(os.path.realpath(__file__))
+SCHEDFILES = os.listdir('{}/schedule/'.format(CDIR))
 
-def gethours(f):
-	return {
-		'1h': 3600,
-		'1d': 86400,
-		'1w': 604800,
-		'1m': 2592000
-	}[f]
+def gethours(schedule):
+    return {
+        '1h': 3600,
+        '1d': 86400,
+        '1w': 604800,
+        '1m': 2592000,
+    }[schedule]
 
-for i in schedfiles:
-	if re.search('^[a-f0-9]{32,32}\.json$', i.strip()) is not None:
-		sched = json.loads(open(cdir+'/schedule/'+i, "r").read())
-		
-		nextrun = (sched['lastrun'] + gethours(sched['params']['frequency']))
-		if nextrun <= time.time():
-			sched['number'] = (sched['number']+1)
-			print("[RUN]   scan:"+sched['params']['filename']+" id:"+str(sched['number'])+" (nextrun:"+str(nextrun)+" / now:"+str(time.time())+")")
+for i in SCHEDFILES:
+    if re.search(r'^[a-f0-9]{32,32}\.json$', i.strip()) is not None:
+        with open('{}/schedule/{}'.format(CDIR, i)) as fp:
+            s = json.load(fp)
+        p = s['params']
+        n = s['number']
 
-			sched['lastrun'] = time.time()
+        nextrun = s['lastrun'] + gethours(p['frequency'])
+        if nextrun <= time.time():
+            n += 1
+            print("[RUN]   scan:{} id:{} (nextrun:{} / now:{})".format(
+                p['filename'],
+                n,
+                nextrun,
+                time.time(),
+                ))
+            lastrun = time.time()
 
-			nmapout = os.popen('nmap '+sched['params']['params']+' --script='+cdir+'/nse/ -oX /tmp/'+str(sched['number'])+'_'+sched['params']['filename']+'.active '+sched['params']['target']+' > /dev/null 2>&1 && '+
-			'sleep 5 && mv /tmp/'+str(sched['number'])+'_'+sched['params']['filename']+'.active /opt/xml/webmapsched_'+str(sched['lastrun'])+'_'+sched['params']['filename']+' && '+
-			'ls -lart /opt/xml/webmapsched_'+str(sched['lastrun'])+'_'+sched['params']['filename']+' && python3 '+cdir+'/cve.py webmapsched_'+str(sched['lastrun'])+'_'+sched['params']['filename']+'').readlines()
+            subprocess.run([
+                'nmap',
+                p['params'],
+                '--script={}/nse/'.format(CDIR),
+                '-oX',
+                '/tmp/{}_{}.active'.format(n, p['filename']),
+                p['target'],
+                ])
+            time.sleep(5)
+            os.rename(
+                '/tmp/{}_{}.active'.format(n, p['filename']),
+                '/opt/xml/webmapsched_{}_{}'.format(lastrun, p['filename']),
+                )
+            print(
+                subprocess.check_output([
+                    'ls', '-lart',
+                    '/opt/xml/webmapsched_{}_{}'.format(lastrun, p['filename']),
+                    ])
+                )
+            print(
+                subprocess.check_output([
+                    'python3', '{}/cve.py'.format(CDIR),
+                    'webmapsched_{}_{}'.format(lastrun, p['filename'])
+                    ])
+                )
 
-			print(nmapout)
+            with open('{}/schedule/{}'.format(CDIR, i), 'w') as fp:
+                fp.write(json.dumps(s, indent=4))
 
-			f = open(cdir+'/schedule/'+i, "w")
-			f.write(json.dumps(sched, indent=4))
-
-			time.sleep(10)
-		else:
-			print("[SKIP]  scan:"+sched['params']['filename']+" id:"+str(sched['number'])+" (nextrun:"+str(nextrun)+" / now:"+str(time.time())+")")
-
+            time.sleep(10)
+        else:
+            print("[SKIP]  scan:{} id:{} (nextrun:{} / now:{})".format(
+                p['filename'],
+                n,
+                nextrun,
+                time.time(),
+                ))
