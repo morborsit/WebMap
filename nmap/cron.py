@@ -5,6 +5,9 @@ import json
 import time
 from django.conf import settings
 
+# this is an experimental function
+# please, use a master branch in order to use it
+exit(0)
 
 CDIR = os.path.dirname(os.path.realpath(__file__))
 SCHEDFILES = os.listdir('{}/schedule/'.format(CDIR))

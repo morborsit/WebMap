@@ -85,7 +85,7 @@ Official Video of v2.1:<br>
 
 ## Features
 - Import and parse Nmap XML files
-- Run and Schedule Nmap Scan from dashboard
+- Run and Schedule Nmap Scan from dashboard (experimental)
 - Statistics and Charts on discovered services, ports, OS, etc...
 - Inspect a single host by clicking on its IP address
 - Attach labels on a host
@@ -93,7 +93,7 @@ Official Video of v2.1:<br>
 - Create a PDF Report with charts, details, labels and notes
 - Copy to clipboard as Nikto, Curl or Telnet commands
 - Search for CVE and Exploits based on CPE collected by Nmap
-- RESTful API
+- RESTful API (experimental)
 
 ## Roadmap for v2.3x
 You love WebMap and you know python? We need your help! This is what we want deploy for the v2.3:

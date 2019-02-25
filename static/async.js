@@ -155,6 +155,10 @@ function checkActiveScan() {
 }
 
 function newscan() {
+	// this is an experimental function
+	// please, use a master branch in order to use it
+	return 0;
+
 	$('#modaltitle').html('<i class="material-icons">wifi_tethering</i> New Nmap Scan');
 	$('#modalbody').html(
 		'Run a new Nmap scan by setting the following 3 parameters:'+
@@ -192,6 +196,10 @@ function newscan() {
 }
 
 function startscan() {
+	// this is an experimental function
+	// please, use a master branch in order to use it
+	return 0;
+
 	$('#modal1').modal('close');
 	csrftoken = $('input[name="csrfmiddlewaretoken"]').val();
 	$.post('/api/v1/nmap/scan/new', {

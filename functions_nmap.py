@@ -37,6 +37,10 @@ def nmap_scaninfo(request):
 	return HttpResponse(json.dumps(res, indent=4), content_type="application/json")
 
 def nmap_newscan(request):
+	# this is an experimental function
+	# please, use a master branch in order to use it
+	exit(0)
+
 	if request.method == "POST":
 		if(re.search('^[a-zA-Z0-9\_\-\.]+$', request.POST['filename']) and re.search('^[a-zA-Z0-9\-\.\:\=\s,]+$', request.POST['params'])):
 			res = {'p':request.POST}
